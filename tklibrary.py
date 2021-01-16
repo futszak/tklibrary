@@ -4,7 +4,7 @@
 # Discription: Communication Python Library by Tomasz Kruk
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.2
+# version 0.3
 
 import socket
 import configparser
@@ -60,6 +60,9 @@ def mysqlupdate(mysqlquery):
     """
     mydb = msqlconn()
     mycursor = mydb.cursor()
-    mycursor.execute(mysqlquery)
+    try:
+        mycursor.execute(mysqlquery)
+    except:
+        return(False)
     mydb.commit()
-    print(mycursor.rowcount, "record(s) affected")
+    return(mycursor.rowcount, "record(s) affected")
