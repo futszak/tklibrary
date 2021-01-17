@@ -4,19 +4,13 @@
 # Discription: Communication Python Library by Tomasz Kruk
 #
 # Author:  Tomasz Kruk   futszak@gmail.com
-# version 0.3
+# version 0.4
 
-import socket
 import configparser
 import mysql.connector
 
 configini = configparser.ConfigParser()
 configini.read('config.ini')
-
-try:
-    UDP_PORT=configini['logsend']['port']
-except:
-    UDP_PORT=514
 
 def logsend(x):
     """Sending UDP datagram to remote machine
@@ -24,10 +18,18 @@ def logsend(x):
     Args:
         logsend ([string]): Datagram string
     """
-    if not configini['logsend']['address']:
+    import socket
+    try:
+        address=configini['logsend']['address']
+    except:
+        print("Config error")
         return()
+    try:
+        UDP_PORT=configini['logsend']['port']
+    except:
+        UDP_PORT=514
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.sendto(x.encode(), (configini['logsend']['address'], UDP_PORT))
+    sock.sendto(x.encode(), (address, UDP_PORT))
 
 def msqlconn():
     """Creating MySQL handle
